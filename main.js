@@ -7,11 +7,12 @@ Webcam.set({
     camera - document.getElementById("camera");
     Webcam.attach( '#camera' );
     
-    function take_snapshot(){
-        Webcam.snap(function(data_uri){
-            document.getElementById("result").innerHTML - '<img id="captured_image" src="'+data_uri+'"/>';
-        });
-    }
+    function take_snapshot()
+{
+    Webcam.snap(function(data_uri) {
+        document.getElementById("result").innerHTML = '<img id="captured_image" src="'+data_uri+'"/>';
+    });
+}
     console.log('ml5 version:', ml5.version);
     
     classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/QiNpnZLmV/model.json', modelLoaded);
@@ -23,7 +24,37 @@ Webcam.set({
     function speak(){
         var synth = window.speechSynthesis;
         speak_data_1 = "The first prediction is " + prediction_1;
-        speak_data_2 = "And the second prediction is " + prediction_2;
-        var utterThis = new SpeechSynthesisUtterance(speak_data_1 + speak_data_2);
+        var utterThis = new SpeechSynthesisUtterance(speak_data_1);
         synth.speak(utterThis);
     }
+
+    function check(){
+        img = document.getElementById('captured_image');
+        classifier.classify(img, gotResults);
+    }
+
+    function gotResult(error, results){
+        if(error){
+            console.error(error);
+            document.getElementById("img").innerHTML = results[0].label;
+            prediction_1 = results[0].label;
+            speak();
+            if(results[0].label == "Amazing"){
+                document.getElementById("img").innerHTML = "amazing.png";
+            }
+
+            if(results[0].label == "Anger"){
+                document.getElementById("img").innerHTML = "anger.png";
+            }
+            if(results[0].label == "Good"){
+                document.getElementById("img").innerHTML = "good.png";
+            }
+            if(results[0].label == "Hello"){
+                document.getElementById("img").innerHTML = "hello.png";
+            }
+            if(results[0].label == "Victory"){
+                document.getElementById("img").innerHTML = "victory.png";
+            }
+        }
+    }
+    
